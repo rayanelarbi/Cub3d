@@ -1,0 +1,65 @@
+# X11 Library leaks
+{
+   X11_strdup_leaks
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:strdup
+   ...
+   obj:*/libX11.so*
+}
+
+{
+   X11_malloc_leaks
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   ...
+   obj:*/libX11.so*
+}
+
+{
+   X11_calloc_leaks
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   ...
+   obj:*/libX11.so*
+}
+
+{
+   X11_realloc_leaks
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:realloc
+   ...
+   obj:*/libX11.so*
+}
+
+# Xcursor library leaks
+{
+   Xcursor_leaks
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   obj:*/libXcursor.so*
+}
+
+# Dynamic linker leaks
+{
+   dl_leaks
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   ...
+   fun:_dl_*
+}
+
+{
+   dl_calloc_leaks
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   ...
+   fun:_dl_*
+}

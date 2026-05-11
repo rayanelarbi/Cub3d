@@ -1,0 +1,19 @@
+# Object files
+build/
+*.a
+*.o
+obj/
+
+# Executable
+cub3d
+
+# MinilibX
+mlx_linux/
+
+# Libft
+libft/*.txt
+libft/*.a
+# Docs
+#doc/
+.vscode/
+.DS_Store

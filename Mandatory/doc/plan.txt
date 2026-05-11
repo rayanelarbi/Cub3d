@@ -1,0 +1,103 @@
+Phase 1: Map Parsing and Validation
+
+	Step 1: Parse the .cub file format
+		Validate map extension ✅
+		Implement texture path parsing (NO, SO, WE, EA) ✅
+		Parse floor and ceiling colors (F, C) ✅
+		Extract the map data ✅
+		Validate map format and characters ✅
+
+	Step 2: Map validation
+		Check for valid characters (0, 1, N, S, E, W)
+		Ensure map is surrounded by walls
+		Find player starting position and direction ✅
+		Validate single player spawn point
+
+Phase 2: Basic Rendering Setup
+
+	Step 3: Initialize graphics properly
+		Set up the image buffer correctly
+		Implement pixel manipulation functions
+		Create basic color functions
+
+	Step 4: Basic 2D map rendering (optional but helpful)
+		Render a top-down view of the map
+		Display player position as a dot
+		This helps debug movement and collision
+
+Phase 3: Player Movement System
+
+	Step 5: Implement player movement
+		Add player structure to context
+		Handle WASD movement with collision detection
+		Implement smooth rotation with arrow keys or mouse
+		Ensure player can't walk through walls
+
+	Step 6: Camera system
+		Set up field of view (FOV)
+		Implement camera plane perpendicular to direction vector
+		Handle camera rotation properly
+
+Phase 4: Raycasting Engine
+
+	Step 7: Basic raycasting algorithm
+		Cast rays from player position for each screen column
+		Calculate ray direction for each pixel column
+		Implement DDA (Digital Differential Analyzer) algorithm
+		Detect wall hits and calculate distances
+
+	Step 8: Wall rendering
+		Calculate wall height based on distance
+		Draw vertical lines for each ray
+		Handle different wall orientations (NS vs EW)
+Phase 5: Texturing
+
+	Step 9: Load textures
+		Implement XPM file loading
+		Store texture data in appropriate structures
+		Handle different textures for different wall faces
+
+	Step 10: Apply textures to walls
+		Calculate texture coordinates
+		Map texture pixels to wall pixels
+		Handle texture scaling based on wall height
+
+Phase 6: Advanced Features
+
+	Step 11: Floor and ceiling
+		Implement floor casting algorithm
+		Apply floor and ceiling colors/textures
+		Optimize rendering performance
+
+	Step 12: Polish and optimization
+		Add proper error handling
+		Optimize raycasting performance
+		Handle edge cases
+		Add smooth movement
+
+Structure à avoir :
+
+Player :
+	pos_x, pos_y (double)
+	dir_x, dir_y (double) — vecteur direction
+	plane_x, plane_y (double) — plan caméra (perp. à dir), détermine FOV
+	Map en tableau int[][] ou char[][]
+
+Algo a prendre en compte : (Pour dessiner la 3D, aide toi de la video du GIF qui explique)
+	Pour chaque x (0..screen_width-1):
+		calculer cameraX = 2 * x / (double)w - 1
+		rayDir = dir + plane * cameraX
+		déterminer mapX/mapY (case initiale)
+		calculer deltaDistX/Y, sideDistX/Y, stepX/Y
+		DDA: avancer en x ou y jusqu'à toucher un mur (map[mapX][mapY] == '1')
+		calculer perpWallDist (distance perpendiculaire)
+		lineHeight = (int)(h / perpWallDist)
+		drawStart/End clippés à l'écran
+		choisir texture/teinte selon side (NS/EW)
+		dessiner colonne verticale (pixel par pixel ou sample texture)
+
+A prendre en compte :
+	Utiliser perpWallDist = (mapHitAtX ? (mapX - posX + (1-stepX)/2) / rayDirX : ... ) pour éviter fish-eye
+	Distinguer side (0 = x-side vertical, 1 = y-side horizontal) pour texture/ombrage
+	Si texture pas encore, dessiner un rectangle uni par colonne pour prototyper
+	Tester d'abord avec écran petit et top-down debug
